@@ -1,0 +1,4 @@
+#!/bin/bash
+git add .
+git commit -m 'Tasks on Shell Variables and Expansions'
+git push
