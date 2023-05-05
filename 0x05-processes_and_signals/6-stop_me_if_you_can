@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# This script stops the Infinity and beyond script using pkill
+
+pkill -f 4-to_infinity_and_beyond
