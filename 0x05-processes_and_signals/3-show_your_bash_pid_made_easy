@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# This scrit displays the PID along with processes name
+# It displays lines containing the word - bash and disables shellcheck
+
+pgrep -l bash
