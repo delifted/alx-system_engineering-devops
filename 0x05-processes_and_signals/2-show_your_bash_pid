@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# This scrit displaysa list of currently running processes
+# It displays lines containing the word - bash and disables shellcheck
+
+ps auxf | grep bash
