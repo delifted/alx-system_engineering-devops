@@ -1,2 +1,4 @@
 #!/usr/bin/env bash
-ls /proc
+# This scrit displaysa list of currently running processes
+
+ps auxf
