@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# This script stops the Infinity and beyond script using kill
+
+kill -9 "$(pgrep -f highlander)"
