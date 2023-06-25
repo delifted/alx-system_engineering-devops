@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Bash script that uses ssh to connect to server
+# Using private key location path and server user - ubuntu
+ssh ubuntu@54.145.240.186 -i ~/.ssh/main_new
