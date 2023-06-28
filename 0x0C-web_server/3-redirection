@@ -1,36 +1,41 @@
 #!/usr/bin/env bash
-#Install the web server 'nginx' on the server and perform some configs
+# Script that configures a new Ubuntu machine to respect above requirements
 
-sudo apt-get update -y
-sudo apt-get upgrade -y
-sudo apt-get install nginx -y
-ufw allow 'Nginx HTTP'
-echo "Hello World!" > /var/www/html/index.html
+sudo apt-get update
+sudo apt-get install -y nginx
 
-new_website=\
-"server {
-	listen 80;
-	listen [::]:80;
+echo "Hello World!" | sudo tee /var/www/html/index.html
 
-	server_name delifted.tech;
+redirect_url="https://www.github.com/delifted"  # Replace with your desired redirection URL
 
-	rot /var/ww/html;
-	index index.html index.htm index.nginx-debian.html 404.html
+# Create a new Nginx configuration file
+new_config="
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
 
-	location / {
-		try_files $uri $uri/ =404;
-	}
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
 
-	if ($request_filename - redirect_me){
-		rewrite ^ https://www.github.com/delifted permanent;
-	}
+    server_name _;
+
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+
+    location /redirect_me {
+        return 301 $redirect_url;
+    }
 }"
 
-echo "$new_website" > /etc/nginx/sites-available/new_website
+config_file="/etc/nginx/sites-available/new_config"  # Change the config file name if needed
+echo "$new_config" | sudo tee "$config_file" > /dev/null
 
-if [ "$(pgrep nginx)" -le 0 ];
-then
-	sudo service nginx start
-else
-	sudo service nginx restart
-fi;
+# Enable the new configuration file
+sudo ln -sf "$config_file" /etc/nginx/sites-enabled/
+
+# Test the Nginx configuration
+sudo nginx -t
+
+# Restart Nginx
+sudo service nginx restart
