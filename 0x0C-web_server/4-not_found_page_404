@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+#Install the web server 'nginx' on the server and perform some configs
+
+sudo apt-get update -y
+sudo apt-get upgrade -y
+sudo apt-get install nginx -y
+ufw allow 'Nginx HTTP'
+echo "Hello World!" > /var/www/html/index.html
+
+new_website=\
+"server {
+	listen 80;
+	listen [::]:80;
+
+	server_name delifted.tech;
+
+	rot /var/ww/html;
+	index index.html index.htm index.nginx-debian.html 404.html
+
+	location / {
+		try_files $uri $uri/ =404;
+	}
+	error_page 404 = /404.html;
+	location = /404.html {
+		internal;
+	}
+
+	if ($request_filename ~ redirect_me){
+		rewrite ^ https://www.github.com/delifted permanent;
+	}
+}"
+
+echo "$new_website" > /etc/nginx/sites-available/new_website
+
+if [ "$(pgrep nginx)" -le 0 ];
+then
+	sudo service nginx start
+else
+	sudo service nginx restart
+fi;
