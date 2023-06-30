@@ -5,37 +5,7 @@ sudo apt-get update
 sudo apt-get install -y nginx
 
 echo "Hello World!" | sudo tee /var/www/html/index.html
+string_for_replacement="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.solajglobal.com permanent;"
+sudo sed -i "s/server_name _;/$string_for_replacement/" /etc/nginx/sites-enabled/default
 
-redirect_url="https://www.github.com/delifted"  # Replace with your desired redirection URL
-
-# Create a new Nginx configuration file
-new_config="
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-
-    root /var/www/html;
-    index index.html index.htm index.nginx-debian.html;
-
-    server_name _;
-
-    location / {
-        try_files \$uri \$uri/ =404;
-    }
-
-    location /redirect_me {
-        return 301 $redirect_url;
-    }
-}"
-
-config_file="/etc/nginx/sites-available/new_config"  # Change the config file name if needed
-echo "$new_config" | sudo tee "$config_file" > /dev/null
-
-# Enable the new configuration file
-sudo ln -sf "$config_file" /etc/nginx/sites-enabled/
-
-# Test the Nginx configuration
-sudo nginx -t
-
-# Restart Nginx
 sudo service nginx restart
