@@ -5,10 +5,10 @@
 #sudo docker pull httpd
 
 # Create a Docker container based on the Apache image
-sudo docker run -p 8080:80 -d httpd
+#sudo docker run -p 8080:80 -d httpd
 
 # Access the apache server and edit config file
 sudo docker exec -it ec954529db2d /bin/bash -c "echo 'DocumentRoot \"/usr/local/apache2/htdocs\"' > /usr/local/apache2/conf/httpd.conf"
 
 # Then edit the html file for the home page
-sudo docker exec -it ec954529db2d /bin/bash -c "echo \<html\>\<body\>\<h1\>Hello Holberton\</h1\>\</body\>\</html\> > index.html"
+sudo docker exec -it ec954529db2d /bin/bash -c "echo '<html><body><h1>Hello Holberton</h1></body></html\>' > /usr/local/apache2/htdocs/index.html"
