@@ -1,40 +1,18 @@
 #!/usr/bin/env bash
-#Install the web server 'nginx' on the server and perform some configs
+# Script that configures a new Ubuntu machine to respect above requirements
 
-sudo apt-get update -y
-sudo apt-get upgrade -y
-sudo apt-get install nginx -y
-ufw allow 'Nginx HTTP'
-echo "Hello World!" > /var/www/html/index.html
+sudo apt-get update
+sudo apt-get install -y nginx
 
-new_website=\
-"server {
-	listen 80;
-	listen [::]:80;
+echo "Hello World!" | sudo tee /var/www/html/index.html
 
-	server_name delifted.tech;
+# Create custom 404 page
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
 
-	rot /var/ww/html;
-	index index.html index.htm index.nginx-debian.html 404.html
+# Modify Nginx configuration for custom 404 page
+sudo sed -i '/listen \[::\]:80 default_server;/a \    error_page 404 /404.html;' /etc/nginx/sites-enabled/new_config
+sudo sed -i '/listen \[::\]:80 default_server;/a \    location = /404.html {\n        root /var/www/html;\n        internal;\n    }' /etc/nginx/sites-enabled/new_config
 
-	location / {
-		try_files $uri $uri/ =404;
-	}
-	error_page 404 = /404.html;
-	location = /404.html {
-		internal;
-	}
+# Restart Nginx to apply changes
+sudo service nginx restart
 
-	if ($request_filename ~ redirect_me){
-		rewrite ^ https://www.github.com/delifted permanent;
-	}
-}"
-
-echo "$new_website" > /etc/nginx/sites-available/new_website
-
-if [ "$(pgrep nginx)" -le 0 ];
-then
-	sudo service nginx start
-else
-	sudo service nginx restart
-fi;
