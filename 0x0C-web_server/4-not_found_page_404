@@ -1,18 +1,50 @@
 #!/usr/bin/env bash
-# Script that configures a new Ubuntu machine to respect above requirements
 
+# Update package lists
 sudo apt-get update
-sudo apt-get install -y nginx
 
-echo "Hello World!" | sudo tee /var/www/html/index.html
+# Install Nginx
+sudo apt-get install -y nginx
 
 # Create custom 404 page
 echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
 
-# Modify Nginx configuration for custom 404 page
-sudo sed -i '/listen \[::\]:80 default_server;/a \    error_page 404 /404.html;' /etc/nginx/sites-enabled/new_config
-sudo sed -i '/listen \[::\]:80 default_server;/a \    location = /404.html {\n        root /var/www/html;\n        internal;\n    }' /etc/nginx/sites-enabled/new_config
+# Configure Nginx
+sudo tee /etc/nginx/sites-available/default > /dev/null <<EOT
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
 
-# Restart Nginx to apply changes
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+
+    server_name _;
+
+    # Define custom 404 page
+    error_page 404 /404.html;
+    location = /404.html {
+        internal;
+    }
+
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+
+    location /redirect_me {
+        return 301 https://www.github.com/delifted;
+    }
+}
+EOT
+
+# Remove the default Nginx welcome page
+sudo rm /etc/nginx/sites-enabled/new_config
+
+# Enable the updated configuration
+sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+
+# Test Nginx configuration
+sudo nginx -t
+
+# Restart Nginx
 sudo service nginx restart
 
