@@ -1,10 +1,10 @@
 #!/bin/bash
 
 get_dns_info() {
-    local domain=$1
-    local subdomain=$2
+    local domain="$1"
+    local subdomain="$2"
 
-    dig_output=$(dig ${subdomain}.${domain} | awk '/ANSWER SECTION:/,0')
+    dig_output=$(dig "${subdomain}.${domain}" | awk '/ANSWER SECTION:/,0')
 
     if [[ -n $dig_output ]]; then
         record_type=$(echo "$dig_output" | awk '{print $4}')
@@ -15,14 +15,14 @@ get_dns_info() {
     fi
 }
 
-domain=$1
-subdomain=$2
+domain="$1"
+subdomain="$2"
 
 if [[ -z $subdomain ]]; then
-    get_dns_info $domain www
-    get_dns_info $domain lb-01
-    get_dns_info $domain web-01
-    get_dns_info $domain web-02
+    get_dns_info "$domain" www
+    get_dns_info "$domain" lb-01
+    get_dns_info "$domain" web-01
+    get_dns_info "$domain" web-02
 else
-    get_dns_info $domain $subdomain
+    get_dns_info "$domain" "$subdomain"
 fi
