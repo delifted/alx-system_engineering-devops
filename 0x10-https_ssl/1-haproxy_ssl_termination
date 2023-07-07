@@ -1,0 +1,32 @@
+defaults
+        mode http
+        timeout connect 5000
+        timeout client 10000
+        timeout server 10000
+        timeout http-request 100
+#       option forwardfor
+#       option http-server-close
+
+frontend www-http
+        bind *:80
+# ADD new bund to port 443
+        bind *:443 ssl crt /etc/ssl/www.solajglobal.tech.pem
+        http-request set-header X-Forwarded-Proto https
+
+# ADD to create cert with its own port
+        acl letsencrypt-acl path_beg /.well-known/acme-challenge/
+        use_backend letsencrypt-backend if letsencrypt-acl
+# ENDADD
+
+        default_backend www-backend
+
+backend www-backend
+        balance roundrobin
+#       redirect scheme https if !{ ssl_fc }
+        server 182159-web-01 18.206.206.105:80 check
+        server 182159-web-02 100.26.159.170:80 check
+
+# ADD to create cert with its own port
+backend letsencrypt-backend
+        server letsencrypt 127.0.0.1:8899
+# ENDADD
