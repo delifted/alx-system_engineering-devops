@@ -10,7 +10,7 @@ defaults
 frontend www-http
         bind *:80
 # ADD new bund to port 443
-        bind *:443 ssl crt /etc/ssl/www.solajglobal.tech.pem
+        bind *:443 ssl crt /etc/letsencrypt/live/www.delifted.tech/fullchain.pem
         http-request set-header X-Forwarded-Proto https
 
 # ADD to create cert with its own port
