@@ -1,0 +1,8 @@
+#!/usr/bin/env bash 
+"Shell script that returns the passed argument\
+as the user being run"
+username="$1"
+result=$(sudo -u "$username" whoami)
+
+# Output the result
+echo "$result"
