@@ -1,3 +1,6 @@
+# Install and Configure UFW Firewall to block all incoming Traffic except\
+# 22 (SSH), 43 (HTTPS SSL), 80 (HTTP)
+
 sudo apt-get -y update
 sudo apt-get -y install ufw
 sudo ufw disable
@@ -8,3 +11,13 @@ sudo ufw allow 22/tcp
 sudo ufw allow 443/tcp
 sudo ufw allow 80/tcp
 sudo ufw enable
+
+# Update and Reconfigure UFW to Redirect Requests on Port 8080/TCP to port 80/TCP
+
+sudo ufw disable
+sudo apt update
+sudo apt install iptables-persistent
+sudo iptables -t nat -A PREROUTING -p tcp --dport 8080 -j REDIRECT --to-port 80
+sudo iptables-save | sudo tee /etc/iptables/rules.v4
+sudo ufw enable
+sudo ufw status
