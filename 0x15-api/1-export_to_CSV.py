@@ -29,7 +29,10 @@ if __name__ == '__main__':
             with open(csv_file_name, mode='w', newline='') as csv_file:
                 for todo in todos:
                     csv_file.write(
-                            '"{}","{}","{},"{}\n'.format(
-                                id, user_name, todo.get('completed'), todo.get('title')
+                            '"{}","{}","{},"{}"\n'.format(
+                                id,
+                                user_name,
+                                todo.get('completed'),
+                                todo.get('title')
                                 )
                             )
