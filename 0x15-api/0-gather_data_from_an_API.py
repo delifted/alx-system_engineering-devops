@@ -5,44 +5,6 @@ import sys
 import re
 
 """
-def get_employee_todo_list(employee_id):
-    base_url = "https://jsonplaceholder.typicode.com"
-
-    try:
-        response = requests.get(f"{base_url}/users/employee_id")
-        response.raise_for_status()
-        user_data = response.json()
-        employee_name = user_data['name']
-
-        response = requests.get(f"{base_url}/todos?userId={employee.id}")
-        response.raise_for_status()
-        todo_list = response.json()
-
-        total_tasks = len(todo_list)
-        completed_tasks = [task for task in todo_list if task['completed']]
-        num_completed_tasks = len(completed_tasks)
-
-        print(f"Employee {employee_name} is done with tasks(
-                {num_completed_tasks}/{total_tasks}:")
-
-        for task in completed_tasks:
-            print(f"\t{task['title']}")
-
-    except requests.exceptions.RequestException as e:
-        print("Error:", e)
-    except Exception as ex:
-        print("An error occured:", ex)
-
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python3 script_name.py <employee_id>")
-        sys.exit(1)
-
-
-        employee_id = int(sys.argv[1])
-        get_employee_todo_list(employee_id)
-"""
-"""
 Using https://jsonplaceholder.typicode.com
 returns info about employee TODO progress
 Implemented using recursion
