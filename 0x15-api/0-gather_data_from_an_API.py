@@ -1,14 +1,16 @@
 #!/usr/bin/python3
 
-import requests
-import sys
-import re
-
 """
 Using https://jsonplaceholder.typicode.com
 returns info about employee TODO progress
 Implemented using recursion
 """
+
+
+import requests
+import sys
+import re
+
 
 API = "https://jsonplaceholder.typicode.com"
 """REST API url"""
