@@ -7,9 +7,9 @@ Implemented using recursion
 """
 
 
+import re
 import requests
 import sys
-import re
 
 
 API = "https://jsonplaceholder.typicode.com"
