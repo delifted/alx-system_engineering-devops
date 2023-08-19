@@ -1,6 +1,6 @@
 server {
     listen 80;
-    server_name delifted.tech;
+    server_name delifted.tech 54.145.240.186;
 
     location / {
         include proxy_params;
