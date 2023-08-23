@@ -1,15 +1,13 @@
-# 1-user_limit.pp
+# Enable the user holberton to login and open files without error.
 
-user { 'holberton':
-  ensure     => present,
-  shell      => '/bin/bash',
-  managehome => true,
-  groups     => ['sudo'],
+# Increase hard file limit for Holberton user.
+exec { 'increase-hard-file-limit-for-holberton-user':
+  command => 'sed -i "/holberton hard/s/5/50000/" /etc/security/limits.conf',
+  path    => '/usr/local/bin/:/bin/'
 }
 
-exec { 'increase-open-file-limit':
-  command => 'ulimit -n 4096',
-  user    => 'holberton',
-  path    => ['/bin', '/usr/bin', '/usr/local/bin'],
-  unless  => 'ulimit -n | grep -q 4096',
+# Increase soft file limit for Holberton user.
+exec { 'increase-soft-file-limit-for-holberton-user':
+  command => 'sed -i "/holberton soft/s/4/50000/" /etc/security/limits.conf',
+  path    => '/usr/local/bin/:/bin/'
 }
