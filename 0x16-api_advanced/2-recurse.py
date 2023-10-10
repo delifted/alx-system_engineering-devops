@@ -1,44 +1,28 @@
 #!/usr/bin/python3
-'''Recursive Function for API'''
-
-import requests
+"""Recursion"""
 
 
-def recurse(subreddit, hot_list=[], after=None):
-    # Base URL for querying hot posts
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
+def recurse(subreddit, hot_list=[], count=0, after=None):
+    """Queries the Reddit API and returns all hot posts
+    of the subreddit"""
+    import requests
 
-    # Set a custom User-Agent to prevent Too Many Requests error
-    headers = {"User-Agent": "Custom Reddit Recursive Posts Collector"}
+    sub_info = requests.get("https://www.reddit.com/r/{}/hot.json"
+                            .format(subreddit),
+                            params={"count": count, "after": after},
+                            headers={"User-Agent": "my-User-Agent"},
+                            allow_redirects=False)
+    if sub_info.status_code >= 400:
+        return None
 
-    # Parameters for the API request, including the "after"
-    # parameter for pagination
-    params = {"limit": 100, "after": after}
+    hot_l = hot_list + [child.get("data").get("title")
+                        for child in sub_info.json()
+                        .get("data")
+                        .get("children")]
 
-    try:
-        # Make the API request
-        response = requests.get(url, headers=headers, params=params)
-        response_json = response.json()
+    info = sub_info.json()
+    if not info.get("data").get("after"):
+        return hot_l
 
-        # Check if the response contains posts
-        if "data" in response_json and "children" in response_json["data"]:
-            posts = response_json["data"]["children"]
-
-            # Append the titles of the current page's hot posts to the list
-            for post in posts:
-                hot_list.append(post["data"]["title"])
-
-            # Check if there's another page of hot posts
-            if "data" in response_json and "after" in response_json["data"]\
-                    and response_json["data"]["after"] is not None:
-                # Recursively call the function with the "after"
-                # parameter to retrieve the next page
-                return recurse(subreddit, hot_list,
-                               response_json["data"]["after"])
-            else:
-                # No more pages, return the complete hot_list
-                return hot_list
-        else:
-            return None  # Invalid subreddit or no posts
-    except requests.exceptions.RequestException:
-        return None  # Error occurred, return None
+    return recurse(subreddit, hot_l, info.get("data").get("count"),
+                   info.get("data").get("after"))
