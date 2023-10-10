@@ -1,39 +1,18 @@
 #!/usr/bin/python3
-"""
-API Request to get Top Ten
-"""
-
-import requests
+"""Top Ten"""
 
 
 def top_ten(subreddit):
-    '''Construct the URL to query the subreddit's hot posts'''
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
+    """Queries the Reddit API and returns the top 10 hot posts
+    of the subreddit"""
+    import requests
 
-    # Set a custom User-Agent to prevent Too Many Requests error
-    headers = {"User-Agent": "Custom Reddit Top Ten Posts Viewer"}
-
-    try:
-        # Make the API request
-        response = requests.get(url, headers=headers)
-        response_json = response.json()
-
-        # Check if the response contains posts
-        if "data" in response_json and "children" in response_json["data"]:
-            posts = response_json["data"]["children"]
-
-            # Print the titles of the first 10 hot posts
-            for index, post in enumerate(posts[:10], start=1):
-                print(f"{post['data']['title']}")
-        else:
-            print("None")  # Invalid subreddit or no posts
-    except requests.exceptions.RequestException:
-        print("None")  # Error occurred, print None
-
-
-'''
-# Example usage
-if __name__ == "__main__":
-    subreddit_name = "programming"  # Replace with the desired subreddit
-    top_ten(subreddit_name)
-'''
+    sub_info = requests.get("https://www.reddit.com/r/{}/hot.json?limit=10"
+                            .format(subreddit),
+                            headers={"User-Agent": "My-User-Agent"},
+                            allow_redirects=False)
+    if sub_info.status_code >= 300:
+        print('None')
+    else:
+        [print(child.get("data").get("title"))
+            for child in sub_info.json().get("data").get("children")]
