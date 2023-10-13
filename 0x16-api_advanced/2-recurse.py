@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Recursion"""
+"""API with Recursion"""
 
 
 def recurse(subreddit, hot_list=[], count=0, after=None):

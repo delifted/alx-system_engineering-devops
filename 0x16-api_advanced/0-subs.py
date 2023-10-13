@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 """
-Python Script to Fetch API
+Python Script Fetch API
 """
 
 import requests

@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" Queries the Reddit API"""
+""" Queries Reddit API"""
 
 
 def count_words(subreddit, word_list, word_dict=None, after=None):

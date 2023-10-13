@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Top Ten"""
+"""Top T"""
 
 
 def top_ten(subreddit):
