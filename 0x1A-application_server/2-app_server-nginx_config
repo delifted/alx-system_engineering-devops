@@ -1,4 +1,7 @@
+# Configures Nginx to serve routes from AirBnB-clone
+
 server {
+    # Listen on port port 80
     listen 80;
     server_name delifted.tech 54.145.240.186;
 

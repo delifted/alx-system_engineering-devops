@@ -1,4 +1,5 @@
 server {
+
     listen 80;
     server_name delifted.tech 54.145.240.186;
 
