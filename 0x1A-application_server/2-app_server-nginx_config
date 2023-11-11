@@ -1,4 +1,4 @@
-# Configures Nginx to serve routes from AirBnB-clone
+# Configures Nginx to serve routes and pages from AirBnB-clone
 
 server {
     # Listen on port port 80
